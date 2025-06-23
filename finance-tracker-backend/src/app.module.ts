@@ -1,4 +1,4 @@
-import { Inject, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
@@ -27,7 +27,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
         synchronize: true,
-        entities: [__dirname + '/**/*.entity{.js, .ts}'], 
+        // entities: [__dirname + '/**/*.entity{.js, .ts}'],
+        autoLoadEntities: true
       }),
       inject: [ConfigService],
     })

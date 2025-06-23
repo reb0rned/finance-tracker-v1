@@ -16,12 +16,12 @@ export class User {
   @OneToMany(() => Category, (category) => category.user, {
     onDelete: 'CASCADE' // если удаляем юзера то удаляеться и категория
   })
-  categories: Category[]
+  categories!: Category[]
 
   @OneToMany(() => Transaction, (transaction) => transaction.user, {
     onDelete: 'CASCADE' // если удаляем юзера то удаляеться и категория
   })
-  transactions: Transaction[]
+  transactions!: Transaction[]
 
   @CreateDateColumn()
   createdAt: Date
