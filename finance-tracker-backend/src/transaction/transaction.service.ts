@@ -75,4 +75,25 @@ export class TransactionService {
 
     return await this.transactionRepository.remove(transaction)
   }
+
+  async getAllWithPagination(userId, page, limit) {
+    const [transactions, total] = await this.transactionRepository.findAndCount({
+      where: { 
+        user: { id: userId }
+      },
+      take: limit,
+      skip: (page - 1) * limit,
+      order: { 
+        createdAt: 'DESC' 
+      }
+    })
+
+    return {
+      data: transactions,
+      total: total,
+      page: page,
+      limit: limit,
+      totalPages: Math.ceil(total / limit)
+    }
+  }
 }

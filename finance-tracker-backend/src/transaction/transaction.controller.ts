@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, UseGuards, Request, Query } from '@nestjs/common';
 import { TransactionService } from './transaction.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
@@ -33,5 +33,15 @@ export class TransactionController {
     @Request() req
   ) {
     return this.transactionService.remove(+id, +req.user.id);
+  }
+
+  @Get('pagination')
+  @UseGuards(JwtAuthGuard)
+  getAllPaginated(
+    @Request() req,
+    @Query('page') page: number,
+    @Query('limit') limit: number
+  ) {
+    return this.transactionService.getAllWithPagination(+req.user.id, page, limit)
   }
 }
