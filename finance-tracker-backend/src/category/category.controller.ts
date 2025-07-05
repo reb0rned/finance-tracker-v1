@@ -1,34 +1,54 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Request, UseGuards, UsePipes, ValidationPipe, Get, Param, Patch, Delete } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 
-@Controller('category')
+@Controller('categories')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
-  create(@Body() createCategoryDto: CreateCategoryDto) {
-    return this.categoryService.create(createCategoryDto);
+  @UseGuards(JwtAuthGuard)
+  @UsePipes(new ValidationPipe())
+  create(
+    @Body() createCategoryDto: CreateCategoryDto,
+    @Request() req
+  ) {
+    return this.categoryService.create(createCategoryDto, +req.user.id);
   }
 
   @Get()
-  findAll() {
-    return this.categoryService.findAll();
+  @UseGuards(JwtAuthGuard)
+  findAll(@Request() req) {
+    return this.categoryService.findAll(+req.user.id)
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.categoryService.findOne(+id);
+  @UseGuards(JwtAuthGuard)
+  findOne(
+    @Param('id') id: number,
+    @Request() req
+  ) {
+    return this.categoryService.findOne(+id, +req.user.id)
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
-    return this.categoryService.update(+id, updateCategoryDto);
+  @UseGuards(JwtAuthGuard)
+  updateOne(
+    @Param('id') id: number,
+    @Request() req,
+    @Body() categoryDto: UpdateCategoryDto
+  ) {
+    return this.categoryService.updateOne(+id, +req.user.id, categoryDto)
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoryService.remove(+id);
+  @UseGuards(JwtAuthGuard)
+  removeOne(
+    @Param('id') id: number,
+    @Request() req
+  ) {
+    return this.categoryService.removeOne(+id, +req.user.id)
   }
 }
