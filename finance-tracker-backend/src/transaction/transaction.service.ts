@@ -76,6 +76,19 @@ export class TransactionService {
     return await this.transactionRepository.remove(transaction)
   }
 
+  async getTotalAmountByType(userId, type) {
+    const transactions = await this.transactionRepository.find({
+      where: {
+        user: { id: userId },
+        type: type
+      }
+    })
+
+    const totalAmount = transactions.reduce((acc, transaction) => acc + transaction.amount,0)
+
+    return totalAmount
+  }
+
   async getAllWithPagination(userId, page, limit) {
     const [transactions, total] = await this.transactionRepository.findAndCount({
       where: { 
