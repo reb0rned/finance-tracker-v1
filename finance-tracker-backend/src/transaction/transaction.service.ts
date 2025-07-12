@@ -17,11 +17,11 @@ export class TransactionService {
 
     // @ts-ignore
     @InjectRepository(User)
-    private readonly userRepository: Repository<Transaction>,
+    private readonly userRepository: Repository<User>,
 
     // @ts-ignore
     @InjectRepository(Category)
-    private readonly categoryRepository: Repository<Transaction>
+    private readonly categoryRepository: Repository<Category>
   ) {
 
   }
