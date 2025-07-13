@@ -1,3 +1,11 @@
+export interface ICategory {
+  title: string
+  id: number
+  createdAt: string
+  updatedAt: string
+  transactions: []
+}
+
 export interface IUser {
   id: number
   email: string
@@ -5,7 +13,7 @@ export interface IUser {
 }
 
 export interface IUserData {
-  email: string,
+  email: string
   password: string
 }
 
