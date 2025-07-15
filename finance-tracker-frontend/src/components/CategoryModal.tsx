@@ -39,7 +39,7 @@ export const CategoryModal: FC<ICategoryModalProps> = ({
         action="/categories"
         method="POST"
         onSubmit={() => setVisibleModal(false)}
-        className="w-full max-w-sm space-y-4 rounded-xl bg-slate-900 p-6 shadow-xl ring-1 ring-white/10 text-white"
+        className="w-full max-w-sm space-y-4 rounded-xl bg-slate-800 p-6 shadow-xl ring-1 ring-white/10 text-white"
       >
         <div>
           <label htmlFor="title" className="block text-sm text-gray-300 mb-1">

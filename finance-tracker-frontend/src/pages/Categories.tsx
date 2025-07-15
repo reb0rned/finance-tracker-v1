@@ -65,7 +65,7 @@ export const Categories: FC = () => {
           {categories.map((category) => (
             <div
               key={category.id}
-              className="w-full max-w-xs bg-slate-700 rounded-xl p-4 flex flex-col justify-between shadow hover:shadow-lg transition"
+              className="w-full max-w-xs bg-slate-800 rounded-xl p-4 flex flex-col justify-between shadow hover:shadow-lg transition"
             >
               <div className="text-lg font-semibold truncate text-center">
                 {category.title}
