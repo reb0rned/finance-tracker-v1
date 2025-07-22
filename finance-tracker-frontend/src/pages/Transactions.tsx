@@ -3,14 +3,21 @@ import { TransactionForm } from "../components/TransactionForm";
 import { instance } from "../api/axios.api";
 import { toast } from "react-toastify";
 import { TransactionsTable } from "../components/TransactionsTable";
+import { useLoaderData } from "react-router";
+import { convertNumberToUSD } from "../helpers/currencyConvert.helper";
+import { Chart } from "../components/Chart";
 
 export const TransactionLoader = async () => {
   const categories = await instance.get("/categories");
   const transactions = await instance.get("transactions");
+  const totalIncome = await instance.get("/transactions/income/find");
+  const totalExpense = await instance.get("/transactions/expense/find");
 
   const data = {
     categories: categories.data,
     transactions: transactions.data,
+    totalIncome: totalIncome.data,
+    totalExpense: totalExpense.data,
   };
 
   return data;
@@ -42,20 +49,12 @@ export const TransactionAction = async ({ request }: any) => {
         return { success: false };
       }
     }
-    case "DELETE": {
-      const transactionId = formData.get("transactionId");
-      try {
-        await instance.delete(`/transactions/${transactionId}`);
-        toast.success("Transaction deleted successfuly!");
-      } catch (error: any) {
-        console.error("Failed to delete transaction!");
-        toast.error("Failed to delete transaction!");
-      }
-    }
   }
 };
 
 export const Transactions: FC = () => {
+  const { totalIncome, totalExpense } = useLoaderData();
+
   return (
     <>
       <div className="grid grid-cols-3 gap-3 mt-4 items-start">
@@ -70,7 +69,7 @@ export const Transactions: FC = () => {
                 Total income:
               </p>
               <p className="bg-green-600 p-1 rounded-sm text-center mt-2">
-                1000$
+                {convertNumberToUSD(totalIncome)}
               </p>
             </div>
             <div>
@@ -78,16 +77,16 @@ export const Transactions: FC = () => {
                 Total expence:
               </p>
               <p className="bg-red-500 p-1 rounded-sm text-center mt-2">
-                1000$
+                {convertNumberToUSD(totalExpense)}
               </p>
             </div>
           </div>
-          <>Chart</>
+          <Chart totalIncome={totalIncome} totalExpense={totalExpense} />
         </div>
       </div>
 
       <h1 className="my-5">
-        <TransactionsTable />
+        <TransactionsTable limit={5} />
       </h1>
     </>
   );
