@@ -38,13 +38,13 @@ export const Header: FC = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink to={"categories"} className={isActiveLink}>
-                Categories
+              <NavLink to={"transactions"} className={isActiveLink}>
+                Transactions
               </NavLink>
             </li>
             <li>
-              <NavLink to={"transactions"} className={isActiveLink}>
-                Transactions
+              <NavLink to={"categories"} className={isActiveLink}>
+                Categories
               </NavLink>
             </li>
           </ul>

@@ -20,9 +20,9 @@ export class TransactionController {
   @Get()
   @UseGuards(JwtAuthGuard)
   findAll(
-    @Request() id: number
+    @Request() req
   ) {
-    return this.transactionService.findAll(+id);
+    return this.transactionService.findAll(+req.user.id);
   }
 
   @Delete(':id')

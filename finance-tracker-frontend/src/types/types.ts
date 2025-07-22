@@ -1,9 +1,24 @@
+export interface IResponseTransactionLoader {
+  categories: ICategory[]
+  transactions: ITransaction[]
+}
+
 export interface ICategory {
   title: string
   id: number
   createdAt: string
   updatedAt: string
   transactions: []
+}
+
+export interface ITransaction {
+  id: number
+  title: string
+	type: "income" | "expense"
+	amount: number
+  createdAt: string
+  updatedAt: string
+  category: ICategory
 }
 
 export interface IUser {

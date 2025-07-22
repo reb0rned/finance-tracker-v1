@@ -1,9 +1,59 @@
 import { type FC } from "react";
 import { TransactionForm } from "../components/TransactionForm";
+import { instance } from "../api/axios.api";
+import { toast } from "react-toastify";
+import { TransactionsTable } from "../components/TransactionsTable";
 
-export const TransactionLoader = async () => {};
+export const TransactionLoader = async () => {
+  const categories = await instance.get("/categories");
+  const transactions = await instance.get("transactions");
 
-export const TransactionAction = async ({ request }: any) => {};
+  const data = {
+    categories: categories.data,
+    transactions: transactions.data,
+  };
+
+  return data;
+};
+
+export const TransactionAction = async ({ request }: any) => {
+  const formData = await request.formData();
+  const method = formData.get("_method");
+
+  switch (method) {
+    case "POST": {
+      const newTransaction = {
+        title: formData.get("title"),
+        amount: Number(formData.get("amount")),
+        type: formData.get("type"),
+        category: Number(formData.get("category")),
+      };
+
+      try {
+        await instance.post("/transactions", newTransaction);
+        toast.success("Transaction added!");
+        return { success: true };
+      } catch (error: any) {
+        console.error(
+          "Failed to add transaction:",
+          error.response?.data || error.message
+        );
+        toast.error("Failed to add transaction");
+        return { success: false };
+      }
+    }
+    case "DELETE": {
+      const transactionId = formData.get("transactionId");
+      try {
+        await instance.delete(`/transactions/${transactionId}`);
+        toast.success("Transaction deleted successfuly!");
+      } catch (error: any) {
+        console.error("Failed to delete transaction!");
+        toast.error("Failed to delete transaction!");
+      }
+    }
+  }
+};
 
 export const Transactions: FC = () => {
   return (
@@ -36,7 +86,9 @@ export const Transactions: FC = () => {
         </div>
       </div>
 
-      <h1 className="my-5">TABLE</h1>
+      <h1 className="my-5">
+        <TransactionsTable />
+      </h1>
     </>
   );
 };
